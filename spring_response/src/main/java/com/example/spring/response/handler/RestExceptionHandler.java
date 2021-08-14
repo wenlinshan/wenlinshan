@@ -37,7 +37,7 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResultData<String> exception(Exception e) {
         log.error("全局异常信息 e={}", e.getMessage(), e);
-        return ResultData.fail(ResultCode.RC500.getCode(),e.getMessage());
+        return ResultData.fail(ResultCode.RC500.getCode(),ResultCode.RC500.getMessage());
     }
 
 }

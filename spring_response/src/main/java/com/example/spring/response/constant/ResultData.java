@@ -9,16 +9,19 @@ import lombok.Data;
  */
 @Data
 public class ResultData<T> {
-
+    /**
+     * 状态码
+     */
     private int status;
+    /**
+     * 返回消息
+     */
     private String message;
+    /**
+     * 返回的结果
+     */
     private T data;
-    private long timestamp;
-
-
-    public ResultData() {
-        this.timestamp = System.currentTimeMillis();
-    }
+    
 
     /**
      * 有结果返回值操作成功
