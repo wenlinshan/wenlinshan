@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wen.domain.Goods;
 import com.wen.service.GoodsService;
+import org.assertj.core.util.DateUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wenlinshan
@@ -36,15 +37,39 @@ public class GoodsTest {
 
     @Test
     public void testSave(){
-       goodsService.save(Goods.builder().name("华为").quantity(100).build());
+       goodsService.save(Goods.builder().name("mac").quantity(100).build());
     }
 
     @Test
     public void testSet(){
-        Goods goods = Goods.builder().name("华为").quantity(1000).build();
-        Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(goods));
-        stringRedisTemplate.opsForHash().putAll("手机4",map);
-        redisTemplate.opsForValue().set("dada",100);
-
+        List<Goods> list = new ArrayList<>();
+        List<Goods> goods = goodsService.list();
+        Map<String,Object> map = new HashMap<>();
+        map.put("date",new Date());
+        map.put("list",goods);
+        redisTemplate.opsForHash().putAll("goodT",map);
     }
+
+    @Test
+    public void testGet(){
+
+        Map<Object, Object> t = redisTemplate.opsForHash().entries("goodT");
+        System.out.println(t);
+        Long o = (Long) redisTemplate.opsForHash().get("goodT", "date");
+        redisTemplate.delete("ss");
+        System.out.println();
+    }
+
+    @Test
+    public void testGet2(){
+        List<Goods> goods = goodsService.list();
+        Map<String,Object> map = new HashMap<>();
+        Date date = new Date();
+        map.put("date",date);
+        map.put("list",goods);
+        redisTemplate.opsForHash().putAll("goodTY",map);
+        redisTemplate.expire("goodTY",10, TimeUnit.SECONDS);
+        System.out.println();
+    }
+
 }
