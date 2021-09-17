@@ -41,6 +41,16 @@ public class TtlConfig {
     public static final String DELAY_KEY = "delayKey";
 
     /**
+     * 死信交换、机
+     *
+     * @return 交换机
+     */
+    @Bean("dlxExchange")
+    public TopicExchange dlxExchange() {
+        return ExchangeBuilder.topicExchange(DELAY_EXCHANGE).build();
+    }
+
+    /**
      * 死信队列
      * durable 为持久队列创建构建器
      * withArgument 最终队列将包含用于声明队列的参数。
@@ -48,15 +58,14 @@ public class TtlConfig {
      *
      * @return 队列
      */
-    @Bean
+    @Bean(TTL_QUEUE)
     public Queue ttlQueue() {
-        Map<String, Object> arguments = new HashMap<>(3);
-        // ttl = 30s
-        arguments.put("x-message-ttl", 30 * 1000);
-        // 设置关联的死信队列
-        arguments.put("x-dead-letter-exchange", DELAY_EXCHANGE);
-        arguments.put("x-dead-letter-routing-key", TTL_KEY);
-        return QueueBuilder.durable(TTL_QUEUE).withArguments(arguments).build();
+        Map<String, Object> map = new HashMap<>(3);
+        // 10 秒钟后成为死信
+        //map.put("x-message-ttl", 10000);
+        // 队列中的消息变成死信后，进入死信交换机
+        map.put("x-dead-letter-exchange", DELAY_EXCHANGE);
+        return new Queue(TTL_QUEUE,true,false,false,map);
     }
 
     /**
@@ -64,7 +73,7 @@ public class TtlConfig {
      *
      * @return 路由key交换机
      */
-    @Bean
+    @Bean(TTL_EXCHANGE)
     public DirectExchange ttlExchange() {
         return ExchangeBuilder.directExchange(TTL_EXCHANGE).durable(true).build();
     }
@@ -84,20 +93,12 @@ public class TtlConfig {
      *
      * @return 队列
      */
-    @Bean
+    @Bean("dlxQueue")
     public Queue dlxQueue() {
         return QueueBuilder.durable(DELAY_QUEUE).build();
     }
 
-    /**
-     * 死信交换、机
-     *
-     * @return 交换机
-     */
-    @Bean
-    public DirectExchange dlxExchange() {
-        return ExchangeBuilder.directExchange(DELAY_EXCHANGE).build();
-    }
+
 
     /**
      * 绑定关系
@@ -107,7 +108,8 @@ public class TtlConfig {
      * @return 绑定
      */
     @Bean
-    public Binding dlxBinding(@Qualifier("dlxQueue") Queue queue, @Qualifier("dlxExchange") DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(DELAY_KEY);
+    public Binding dlxBinding(@Qualifier("dlxQueue") Queue queue, @Qualifier("dlxExchange") TopicExchange exchange) {
+        //不需要key
+        return BindingBuilder.bind(queue).to(exchange).with("#");
     }
 }
