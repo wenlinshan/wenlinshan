@@ -1,0 +1,10 @@
+
+
+spring:
+  application:
+    name: shiro-demo
+logging:
+  file:
+    name: shiro-demo.log
+    path: /logs
+
