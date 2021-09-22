@@ -25,6 +25,11 @@ public class TtlSend {
     @Autowired
     private MessageCallback messageCallback;
 
+    /**
+     * 死信队列
+     * @param user
+     * @return
+     */
     public  String sendTtlMessage(User user){
         rabbitTemplate.setConfirmCallback(messageCallback);
         rabbitTemplate.setReturnCallback(messageCallback);
@@ -40,6 +45,11 @@ public class TtlSend {
         return "发送延迟成功";
     }
 
+    /**
+     * 插件形式
+     * @param user
+     * @return
+     */
     public String pluginMessage(User user){
         rabbitTemplate.setConfirmCallback(messageCallback);
         rabbitTemplate.setReturnCallback(messageCallback);
