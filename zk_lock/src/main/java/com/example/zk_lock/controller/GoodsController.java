@@ -1,6 +1,7 @@
 package com.example.zk_lock.controller;
 
 import com.example.zk_lock.service.GoodsService;
+import com.example.zk_lock.util.DistributedLockUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,12 @@ public class GoodsController {
             return "库存不足";
         }
         return "创建订单成功";
+    }
+
+    @GetMapping("close")
+    public String closeZk(){
+        DistributedLockUtil.closeZkClient();
+        return "关闭成功";
     }
 
 }

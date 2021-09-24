@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.zk_lock.domain.Goods;
 import com.example.zk_lock.mapper.GoodsMapper;
 import com.example.zk_lock.service.GoodsService;
-import com.example.zk_lock.util.DistributedLock;
+import com.example.zk_lock.util.DistributedLockUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -17,8 +16,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
-    @Autowired
-    private DistributedLock distributedLock;
+
 
 
     /**
@@ -31,18 +29,19 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Override
     public boolean killGoods(Long id, Integer num) {
 
-        String lock = distributedLock.getLock();
+        String lock = DistributedLockUtil.getLock();
         if (Objects.nonNull(lock)) {
             Goods goods = this.getById(id);
             if (goods.getQuantity() <= 0) {
-                distributedLock.releaseLock(lock);
+                //库存数量不足,释放锁
+                DistributedLockUtil.releaseLock(lock);
                 return false;
             }
             log.info("库存数量======" + goods.getQuantity());
             //将库存减操作
             goods.setQuantity(goods.getQuantity() - 1);
             this.updateById(goods);
-            distributedLock.releaseLock(lock);
+            DistributedLockUtil.releaseLock(lock);
             return true;
         }
         return false;
