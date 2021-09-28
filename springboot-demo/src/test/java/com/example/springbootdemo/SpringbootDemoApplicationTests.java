@@ -15,11 +15,15 @@ class SpringbootDemoApplicationTests {
     @Test
     public void test() throws Exception {
         long start = System.currentTimeMillis();
-        CompletableFuture<String> one = asyncTasks.doTaskOne();
-        CompletableFuture<String> two = asyncTasks.doTaskTwo();
-        CompletableFuture<String> three = asyncTasks.doTaskThree();
+        //CompletableFuture<String> one = asyncTasks.doTaskOne();
+        //CompletableFuture<String> two = asyncTasks.doTaskTwo();
+        //CompletableFuture<String> three = asyncTasks.doTaskThree();
+        asyncTasks.doTaskOne();
+        asyncTasks.doTaskTwo();
+        asyncTasks.doTaskThree();
         //CompletableFuture.allOf(one, two, three).join();
-        System.out.println(one.get() + ";" + two.get() + ";" + three.get());
+        //System.out.println(one.get() + ";" + two.get() + ";" + three.get());\
+        //CompletableFuture.allOf().join()
         long end = System.currentTimeMillis();
         System.out.println("总耗时：" + (end - start) + "毫秒");
     }
