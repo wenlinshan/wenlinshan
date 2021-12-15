@@ -7,7 +7,7 @@ import org.I0Itec.zkclient.ZkConnection;
 import org.I0Itec.zkclient.exception.ZkNodeExistsException;
 import org.apache.zookeeper.CreateMode;
 
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -20,7 +20,7 @@ public class DistributedLockUtil {
     /**
      * 常量
      */
-    private static final String CONNECTION_STRING = "120.79.4.169:2181";
+    private static final String CONNECTION_STRING = "127.0.0.1:2181";
     private static final String LOCK_NODE = "/distributed_lock";
     private static final String CHILDREN_NODE = "/lock_";
 
@@ -50,6 +50,7 @@ public class DistributedLockUtil {
         try {
             // 1.在Zookeeper指定节点下创建临时顺序节点
             String lockName = zkClient.createEphemeralSequential(LOCK_NODE + CHILDREN_NODE, "");
+            System.out.println("+++"+lockName);
             // 尝试获取锁
             acquireLock(lockName);
             return lockName;
@@ -69,12 +70,7 @@ public class DistributedLockUtil {
         // 2.获取lock节点下的所有子节点
         List<String> childrenList = zkClient.getChildren(LOCK_NODE);
         // 3.对子节点进行排序,获取最小值
-        childrenList.sort(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return Integer.parseInt(o1.split("_")[1]) - Integer.parseInt(o2.split("_")[1]);
-            }
-        });
+        Collections.sort(childrenList);
         // 4.判断当前创建的节点是否在第一位
         int lockPosition = childrenList.indexOf(lockName.split("/")[lockName.split("/").length - 1]);
         if (lockPosition < 0) {
@@ -133,6 +129,8 @@ public class DistributedLockUtil {
     public static void closeZkClient() {
         zkClient.close();
     }
+
+
 }
 
 
