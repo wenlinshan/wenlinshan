@@ -40,7 +40,15 @@ public class TtlConfig {
      */
     public static final String DELAY_KEY = "delayKey";
 
-
+    /**
+     * 死信交换、机
+     *
+     * @return 交换机
+     */
+    @Bean("dlxExchange")
+    public TopicExchange dlxExchange() {
+        return ExchangeBuilder.topicExchange(DELAY_EXCHANGE).build();
+    }
 
     /**
      * 死信队列
@@ -89,15 +97,7 @@ public class TtlConfig {
     public Queue dlxQueue() {
         return QueueBuilder.durable(DELAY_QUEUE).build();
     }
-    /**
-     * 死信交换、机
-     *
-     * @return 交换机
-     */
-    @Bean("dlxExchange")
-    public TopicExchange dlxExchange() {
-        return ExchangeBuilder.topicExchange(DELAY_EXCHANGE).build();
-    }
+
 
 
     /**

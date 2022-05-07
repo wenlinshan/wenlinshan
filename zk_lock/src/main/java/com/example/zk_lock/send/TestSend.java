@@ -1,6 +1,5 @@
 package com.example.zk_lock.send;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.example.zk_lock.config.MessageCallback;
 import com.example.zk_lock.config.RabbitConfig;
 import com.example.zk_lock.domain.User;
@@ -22,7 +21,7 @@ public class TestSend {
      * 初始消息
      */
     public String sendMessage(User user){
-        rabbitTemplate.convertAndSend(RabbitConfig.TEST_EXCHANGE,RabbitConfig.TEST_KEY, BeanUtil.beanToMap(user,false,true));
+        rabbitTemplate.convertAndSend(RabbitConfig.TEST_EXCHANGE,RabbitConfig.TEST_KEY,user);
         return "发送成功";
     }
 

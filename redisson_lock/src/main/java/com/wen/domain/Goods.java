@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 /**
  * @author wenlinshan
  */
@@ -16,7 +14,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Goods implements Serializable {
+public class Goods {
     @TableId(value = "",type = IdType.ASSIGN_ID)
     private Long id;
 

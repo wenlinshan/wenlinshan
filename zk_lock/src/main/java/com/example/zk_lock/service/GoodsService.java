@@ -14,7 +14,7 @@ public interface GoodsService extends IService<Goods> {
      * @param num 数量
      * @return
      */
-    boolean killGoods(Long id,Integer num) throws InterruptedException;
+    boolean killGoods(Long id,Integer num);
 
 
 }
