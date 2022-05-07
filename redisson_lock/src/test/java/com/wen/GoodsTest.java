@@ -2,6 +2,7 @@ package com.wen;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.wen.config.RedissonProperties;
 import com.wen.domain.Goods;
 import com.wen.service.GoodsService;
 import org.assertj.core.util.DateUtil;
@@ -29,6 +30,7 @@ public class GoodsTest {
     @Resource
     private GoodsService goodsService;
 
+
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
@@ -37,7 +39,7 @@ public class GoodsTest {
 
     @Test
     public void testSave(){
-       goodsService.save(Goods.builder().name("mac").quantity(100).build());
+       //goodsService.save(Goods.builder().name("mac").quantity(100).build());
     }
 
     @Test
@@ -52,12 +54,9 @@ public class GoodsTest {
 
     @Test
     public void testGet(){
-
-        Map<Object, Object> t = redisTemplate.opsForHash().entries("goodT");
-        System.out.println(t);
-        Long o = (Long) redisTemplate.opsForHash().get("goodT", "date");
-        redisTemplate.delete("ss");
-        System.out.println();
+        //redisTemplate.opsForValue().set("234",Goods.builder().name("mac").quantity(100).build());
+        //Goods o = (Goods) redisTemplate.opsForValue().get("234");
+        //System.out.println(o);
     }
 
     @Test

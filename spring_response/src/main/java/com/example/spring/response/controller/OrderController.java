@@ -3,6 +3,8 @@ package com.example.spring.response.controller;
 import com.example.spring.response.constant.ResultData;
 import com.example.spring.response.domain.Order;
 import com.example.spring.response.exception.BizException;
+import com.example.spring.response.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class OrderController {
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/getHi")
     public ResultData<String> getHi(){
@@ -19,8 +23,8 @@ public class OrderController {
     }
 
     @GetMapping("getWorld")
-    public Order getWorld(){
-        return new Order(1L,"购物车");
+    public Order getWorld(Long orderId,Long userId){
+        return orderService.testOrder(orderId,userId);
     }
 
     @GetMapping("/getError")

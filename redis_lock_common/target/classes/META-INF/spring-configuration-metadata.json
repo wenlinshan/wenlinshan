@@ -1,0 +1,112 @@
+{
+  "groups": [
+    {
+      "name": "redisson",
+      "type": "cn.vipwen.config.RedissonProperties",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "redisson.address-resolver-group-factory",
+      "type": "org.redisson.connection.AddressResolverGroupFactory",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.age",
+      "type": "java.lang.Integer",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.clean-up-keys-amount",
+      "type": "java.lang.Integer",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.codec",
+      "type": "org.redisson.client.codec.Codec",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.email",
+      "type": "java.lang.String",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.event-loop-group",
+      "type": "io.netty.channel.EventLoopGroup",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.executor",
+      "type": "java.util.concurrent.ExecutorService",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.keep-pub-sub-order",
+      "type": "java.lang.Boolean",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.lock-watchdog-timeout",
+      "type": "java.lang.Long",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.max-clean-up-delay",
+      "type": "java.lang.Integer",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.min-clean-up-delay",
+      "type": "java.lang.Integer",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.name",
+      "type": "java.lang.String",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.netty-hook",
+      "type": "org.redisson.client.NettyHook",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.netty-threads",
+      "type": "java.lang.Integer",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.reference-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.reliable-topic-watchdog-timeout",
+      "type": "java.lang.Long",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.threads",
+      "type": "java.lang.Integer",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.transport-mode",
+      "type": "org.redisson.config.TransportMode",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.use-script-cache",
+      "type": "java.lang.Boolean",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    },
+    {
+      "name": "redisson.use-thread-class-loader",
+      "type": "java.lang.Boolean",
+      "sourceType": "cn.vipwen.config.RedissonProperties"
+    }
+  ],
+  "hints": []
+}

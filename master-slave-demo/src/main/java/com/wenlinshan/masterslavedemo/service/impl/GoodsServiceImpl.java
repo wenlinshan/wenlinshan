@@ -1,5 +1,7 @@
 package com.wenlinshan.masterslavedemo.service.impl;
 
+import cn.vipwen.vipwendynamicdatasource.annotation.DbSource;
+import cn.vipwen.vipwendynamicdatasource.constant.DBConstantEnum;
 import com.wenlinshan.masterslavedemo.annotation.Master;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -43,6 +45,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
      *
      * @return 全部
      */
+    @DbSource(DBConstantEnum.SLAVE1)
     @Override
     public List<Goods> getGoodsAll() {
         return this.list();

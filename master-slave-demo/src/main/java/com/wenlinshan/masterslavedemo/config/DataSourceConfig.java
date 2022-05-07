@@ -20,7 +20,7 @@ import java.util.Map;
  * @author wls
  */
 
-@Configuration
+//@Configuration
 public class DataSourceConfig {
 
     /**

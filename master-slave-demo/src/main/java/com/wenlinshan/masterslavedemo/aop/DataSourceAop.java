@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
  * 设置切面 执行具体方法选择的数据源
  * @author wls
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class DataSourceAop {
 
     /**

@@ -22,7 +22,7 @@ public class GoodsController {
     private GoodsService goodsService;
 
     @GetMapping("test")
-    public String createOrderTest() {
+    public String createOrderTest() throws InterruptedException {
         if (!goodsService.killGoods(1405065181720055809L, 1)) {
             return "库存不足";
         }

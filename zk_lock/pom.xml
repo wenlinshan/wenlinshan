@@ -59,6 +59,16 @@
             <artifactId>zkclient</artifactId>
             <version>0.10</version>
         </dependency>
+        <dependency>
+            <groupId>cn.vipwen</groupId>
+            <artifactId>vipwen-springboot-starter-zkLock</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.vipwen</groupId>
+            <artifactId>vipwen-springboot-starter-redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
