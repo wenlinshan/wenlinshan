@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.vipwen.es_demo.mapper.GSkuMapper">
+  <resultMap id="BaseResultMap" type="cn.vipwen.es_demo.model.GSku">
+    <!--@mbg.generated-->
+    <!--@Table g_sku-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="price" jdbcType="BIGINT" property="price" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="alert_num" jdbcType="INTEGER" property="alert_num" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="images" jdbcType="VARCHAR" property="images" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+    <result column="spu_id" jdbcType="BIGINT" property="spu_id" />
+    <result column="category_id" jdbcType="BIGINT" property="category_id" />
+    <result column="category_name" jdbcType="VARCHAR" property="category_name" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brand_name" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
+    <result column="sale_num" jdbcType="INTEGER" property="sale_num" />
+    <result column="comment_num" jdbcType="INTEGER" property="comment_num" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, sn, `name`, price, num, alert_num, image, images, weight, create_time, update_time, 
+    spu_id, category_id, category_name, brand_name, spec, sale_num, comment_num, `status`, 
+    version
+  </sql>
+</mapper>

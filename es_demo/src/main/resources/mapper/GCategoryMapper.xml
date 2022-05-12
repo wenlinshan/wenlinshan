@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.vipwen.es_demo.mapper.GCategoryMapper">
+  <resultMap id="BaseResultMap" type="cn.vipwen.es_demo.model.GCategory">
+    <!--@mbg.generated-->
+    <!--@Table g_category-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="goods_num" jdbcType="INTEGER" property="goods_num" />
+    <result column="is_show" jdbcType="CHAR" property="is_show" />
+    <result column="is_menu" jdbcType="CHAR" property="is_menu" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="parent_id" jdbcType="INTEGER" property="parent_id" />
+    <result column="template_id" jdbcType="INTEGER" property="template_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, goods_num, is_show, is_menu, seq, parent_id, template_id
+  </sql>
+</mapper>
