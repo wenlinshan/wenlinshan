@@ -1,8 +1,11 @@
 package cn.vipwen.es_demo.service;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import cn.vipwen.es_demo.constants.EsConsts;
+import cn.vipwen.es_demo.model.Person;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -15,7 +18,9 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.core.CountRequest;
 import org.elasticsearch.client.core.CountResponse;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -28,6 +33,8 @@ import org.elasticsearch.search.aggregations.bucket.histogram.ParsedDateHistogra
 import org.elasticsearch.search.aggregations.metrics.CardinalityAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.ParsedCardinality;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.springframework.stereotype.Service;
 
@@ -177,42 +184,61 @@ public class ElasticSearchService {
 
     /**
      * 搜索
+     *
      * @param keyword
      * @param pageNo
      * @param pageSize
      * @return
      * @throws IOException
      */
-    public List<Map<String ,Object>> searchPage(String keyword, int pageNo, int pageSize) throws IOException {
+    public List<Map<String, Object>> searchPage(String keyword, int pageNo, int pageSize) throws IOException {
 
         SearchRequest searchRequest = new SearchRequest(EsConsts.INDEX_NAME);
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        pageNo = pageNo * pageSize;
         pageSize = pageSize == 0 ? 10 : pageSize;
+        pageNo = (pageNo - 1) * pageSize;
         searchSourceBuilder.from(pageNo);
         searchSourceBuilder.size(pageSize);
-
+        //多个条件查询
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         //输入的关键字匹配的字段
         QueryBuilder termQueryBuilder = QueryBuilders.matchQuery("remark", keyword);
-
-        searchSourceBuilder.query(termQueryBuilder);
+        queryBuilder.must(termQueryBuilder);
+        searchSourceBuilder.query(queryBuilder);
+        // 指定高亮
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        highlightBuilder.field("remark")
+                .preTags("<span style=color:green>")
+                .postTags("</span>");
+        searchSourceBuilder.highlighter(highlightBuilder);
         searchSourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
-
         //执行
         searchRequest.source(searchSourceBuilder);
         SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        ArrayList<Map<String, Object>> list = new ArrayList<>();
+        List<Person> people = new ArrayList<>();
 
-        ArrayList<Map<String,Object>> list = new ArrayList<>();
-
-        if (search.getHits().getHits().length!=0){
+        if (search.getHits().getHits().length != 0) {
+            //组装数据
             for (SearchHit documentFields : search.getHits().getHits()) {
-                list.add(documentFields.getSourceAsMap());
+                Map<String, Object> source = documentFields.getSourceAsMap();
+                //Person person = new Person();
+                Person person = BeanUtil.mapToBean(source, Person.class, false, CopyOptions.create());
+                HighlightField remark = documentFields.getHighlightFields().get("remark");
+                StringBuilder s = new StringBuilder();
+                for (Text fragment : remark.getFragments()) {
+                    s.append(fragment);
+                }
+                person.setRemark(s.toString());
+                people.add(person);
+                list.add(source);
             }
-        }else {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("code",404);
-            map.put("msg","没有相关数据");
+            System.out.println(people);
+        } else {
+            HashMap<String, Object> map = new HashMap<>(4);
+            map.put("code", 404);
+            map.put("msg", "没有相关数据");
             list.add(map);
         }
         return list;
