@@ -5,14 +5,16 @@ import cn.vipwen.es_demo.constants.EsConsts;
 import cn.vipwen.es_demo.mapper.GSkuMapper;
 import cn.vipwen.es_demo.model.GSku;
 import cn.vipwen.es_demo.model.SkuInfo;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,24 +44,35 @@ public class GSkuService extends ServiceImpl<GSkuMapper, GSku> {
      * @return
      */
     public String importSku(int pageNum) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        //关闭时间戳的功能
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,false);
+
+        //现在需要在中间加一个
+        mapper.registerModule(new JavaTimeModule());
+
         Page<GSku> page = new Page<>(pageNum, 10000);
         page.setSearchCount(false);
-        Page<GSku> skuPage = page(page);
-        List<SkuInfo> skuInfos = BeanUtil.copyToList(skuPage.getRecords(), SkuInfo.class);
-        IndexRequest indexRequest = new IndexRequest();
-        List<IndexRequest> indexRequests = new ArrayList<>();
+        //Page<GSku> skuPage = page(page, Wrappers.lambdaQuery(GSku.class).orderByAsc(GSku::getId));
+        List<GSku> list = list();
+        List<SkuInfo> skuInfos = BeanUtil.copyToList(list, SkuInfo.class);
+        //IndexRequest indexRequest = new IndexRequest();
+        //List<IndexRequest> indexRequests = new ArrayList<>();
         skuInfos.forEach(p->{
             IndexRequest request = new IndexRequest(EsConsts.SKU_INDEX_NAME);
-            //填充id
-            request.id(p.getId() + "");
-            //先不修改id
-            request.source(JSON.toJSONString(p), XContentType.JSON);
-            request.opType(DocWriteRequest.OpType.CREATE);
-            indexRequests.add(request);
+            try {
+                //填充id
+                request.id(p.getId() + "");
+                //先不修改id
+                request.source(mapper.writeValueAsString(p), XContentType.JSON);
+                request.opType(DocWriteRequest.OpType.CREATE);
+                //indexRequests.add(request);
+                bulkProcessor.add(request);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
 
         });
-        indexRequests.forEach(bulkProcessor::add);
-        restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
         return "ok";
     }
 

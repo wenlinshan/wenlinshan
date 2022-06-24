@@ -1,8 +1,9 @@
 package cn.vipwen.es_demo.config;
 
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -15,35 +16,36 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.ByteSizeUnit;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.unit.TimeValue;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
  * ElasticSearch HighLevelClient
+ * @author wls
  */
 @Slf4j
-@ConfigurationProperties(prefix = "spring.elasticsearch.rest")
+@EnableConfigurationProperties(value = {EsClientProperties.class})
 @Configuration
 public class RestHighLevelClientConfig {
 
 
-    @Setter
-    private List<String> clusterNodes;
-
     @Bean
-    public RestHighLevelClient restHighLevelClient() {
-        HttpHost[] hosts = clusterNodes.stream()
+    public RestHighLevelClient restHighLevelClient(EsClientProperties esClientProperties) {
+        HttpHost[] hosts = esClientProperties.getClusterNodes().stream()
                 // eg: new HttpHost("127.0.0.1", 9200, "http")
                 .map(this::buildHttpHost)
                 .toArray(HttpHost[]::new);
         RestClientBuilder builder = RestClient.builder(hosts);
-        //填充用户名密码
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        //credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("userName", "password"));
+        //填充用户名密码
+        if (Objects.nonNull(esClientProperties.getUsername()) && Objects.nonNull(esClientProperties.getPassword())) {
+            credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(esClientProperties.getUsername(), esClientProperties.getPassword()));
+        }
         builder.setHttpClientConfigCallback(httpClientBuilder -> {
             httpClientBuilder.setMaxConnTotal(30);
             httpClientBuilder.setMaxConnPerRoute(30);
@@ -66,13 +68,24 @@ public class RestHighLevelClientConfig {
 
     }
 
-
+    /**
+     * 构建连接地址
+     *
+     * @param node 连接地址
+     * @return httpHost
+     */
     private HttpHost buildHttpHost(String node) {
         String[] nodeInfo = node.split(":");
         return new HttpHost(nodeInfo[0].trim(), Integer.parseInt(nodeInfo[1].trim()), "http");
     }
 
 
+    /**
+     * 批量处理数据
+     *
+     * @param restHighLevelClient 客户端
+     * @return 批量处理器
+     */
     @Bean
     public BulkProcessor bulkProcessor(RestHighLevelClient restHighLevelClient) {
 
@@ -85,9 +98,7 @@ public class RestHighLevelClientConfig {
             @Override
             public void afterBulk(long executionId, BulkRequest request,
                                   BulkResponse response) {
-                if (!response.hasFailures()) {
-                    log.info("2. 【afterBulk-成功】批量 [{}] 完成在 {} ms", executionId, response.getTook().getMillis());
-                } else {
+                if (response.hasFailures()) {
                     BulkItemResponse[] items = response.getItems();
                     for (BulkItemResponse item : items) {
                         if (item.isFailed()) {
@@ -95,6 +106,8 @@ public class RestHighLevelClientConfig {
                             break;
                         }
                     }
+                } else {
+                    log.info("2. 【afterBulk-成功】批量 [{}] 完成在 {} ms", executionId, response.getTook().getMillis());
                 }
             }
 

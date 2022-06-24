@@ -191,7 +191,7 @@ public class ElasticSearchService {
      * @return
      * @throws IOException
      */
-    public List<Map<String, Object>> searchPage(String keyword, int pageNo, int pageSize) throws IOException {
+    public List<Person> searchPage(String keyword, int pageNo, int pageSize) throws IOException {
 
         SearchRequest searchRequest = new SearchRequest(EsConsts.INDEX_NAME);
 
@@ -241,7 +241,7 @@ public class ElasticSearchService {
             map.put("msg", "没有相关数据");
             list.add(map);
         }
-        return list;
+        return people;
     }
 
 

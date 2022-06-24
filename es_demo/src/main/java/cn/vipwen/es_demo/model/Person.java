@@ -11,21 +11,20 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
  * 用户实体类
  * </p>
  *
- * @author yangkai.shen
- * @date Created in 2018-12-20 17:29
  */
-@Document(indexName = EsConsts.INDEX_NAME,  shards = 1, replicas = 0)
+@Document(indexName = EsConsts.INDEX_NAME)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Person {
+public class Person implements Serializable {
     /**
      * 主键
      */
@@ -43,7 +42,6 @@ public class Person {
      */
     @Field(type = FieldType.Keyword)
     private String country;
-
     /**
      * 年龄
      */
@@ -54,8 +52,12 @@ public class Person {
      * 生日
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern ="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second)
-    private LocalDateTime birthday;
+    @Field( type = FieldType.Date,
+            format = DateFormat.custom,
+            pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date birthday;
+
+
 
     /**
      * 介绍
