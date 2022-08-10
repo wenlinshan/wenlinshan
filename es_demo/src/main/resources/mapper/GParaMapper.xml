@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.vipwen.es_demo.mapper.GParaMapper">
+  <resultMap id="BaseResultMap" type="cn.vipwen.es_demo.model.GPara">
+    <!--@mbg.generated-->
+    <!--@Table g_para-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="options" jdbcType="VARCHAR" property="options" />
+    <result column="seq" jdbcType="BIGINT" property="seq" />
+    <result column="template_id" jdbcType="BIGINT" property="template_id" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, `options`, seq, template_id
+  </sql>
+</mapper>

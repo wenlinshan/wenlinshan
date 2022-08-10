@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.vipwen.es_demo.mapper.GAlbumMapper">
+  <resultMap id="BaseResultMap" type="cn.vipwen.es_demo.model.GAlbum">
+    <!--@mbg.generated-->
+    <!--@Table `g_album`-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="image_items" jdbcType="LONGVARCHAR" property="image_items" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    `id`, `title`, `image`, `image_items`
+  </sql>
+</mapper>
