@@ -17,7 +17,7 @@ import java.io.IOException;
  * @date 2021/6/16 10:57
  * @desc
  */
-@Configuration
+//@Configuration
 public class RedissonConfig {
 
    /* @Value("${redisson.address}")
@@ -68,7 +68,7 @@ public class RedissonConfig {
     }
     }*/
 
-    @Bean(destroyMethod="shutdown")
+    //@Bean(destroyMethod="shutdown")
     public RedissonClient redisson() throws IOException {
         return Redisson.create(
                 Config.fromYAML(new ClassPathResource("redisson-single.yml").getInputStream()));

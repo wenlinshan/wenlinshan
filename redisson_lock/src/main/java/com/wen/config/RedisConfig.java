@@ -9,9 +9,9 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-@Configuration
+//@Configuration
 public class RedisConfig {
-    @Bean
+    //@Bean
     public StringRedisTemplate redisTemplate(RedisConnectionFactory factory) {
         // 配置连接工厂
         StringRedisTemplate template = new StringRedisTemplate(factory);
