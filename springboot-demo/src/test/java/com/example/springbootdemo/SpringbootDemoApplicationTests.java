@@ -27,5 +27,8 @@ class SpringbootDemoApplicationTests {
         long end = System.currentTimeMillis();
         System.out.println("总耗时：" + (end - start) + "毫秒");
     }
+    public static void main(String[] args) {
+        System.out.println("你好啊");
+    }
 
 }
