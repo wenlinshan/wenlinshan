@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.vipwen.stream_mybatis.mapper.GSkuMapper">
+
+    <resultMap id="BaseResultMap" type="cn.vipwen.stream_mybatis.pojo.GSku">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="sn" column="sn" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="price" column="price" jdbcType="BIGINT"/>
+            <result property="num" column="num" jdbcType="INTEGER"/>
+            <result property="alertNum" column="alert_num" jdbcType="INTEGER"/>
+            <result property="image" column="image" jdbcType="VARCHAR"/>
+            <result property="images" column="images" jdbcType="VARCHAR"/>
+            <result property="weight" column="weight" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="spuId" column="spu_id" jdbcType="BIGINT"/>
+            <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+            <result property="categoryName" column="category_name" jdbcType="VARCHAR"/>
+            <result property="brandName" column="brand_name" jdbcType="VARCHAR"/>
+            <result property="spec" column="spec" jdbcType="VARCHAR"/>
+            <result property="saleNum" column="sale_num" jdbcType="INTEGER"/>
+            <result property="commentNum" column="comment_num" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="CHAR"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="age" column="age" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,sn,name,
+        price,num,alert_num,
+        image,images,weight,
+        create_time,update_time,spu_id,
+        category_id,category_name,brand_name,
+        spec,sale_num,comment_num,
+        status,version,age
+    </sql>
+    <select id="getSkuList" resultType="cn.vipwen.stream_mybatis.pojo.GSku">
+        SELECT * FROM  g_sku;
+    </select>
+
+    <select id="getSkuAll" fetchSize="-2147483648" resultSetType="FORWARD_ONLY" resultType="cn.vipwen.stream_mybatis.pojo.GSku">
+        SELECT * FROM  g_sku;
+    </select>
+</mapper>
